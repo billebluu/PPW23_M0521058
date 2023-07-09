@@ -105,7 +105,7 @@
                                                 <td class="text-center">Sudah Terbayar</td>
                                                 @endif
                                                 @if ($admission->payment_status === 'unpaid')
-                                                <td class="text-center">Silakan melanjutkan pembayaran</td>
+                                                <td class="text-center">Silakan melanjutkan pembayaran biaya pendaftaran</td>
                                                 @elseif ($admission->payment_status === 'paid' && $admission->status === 'pending')
                                                 <td class="text-center">Proses Seleksi</td>
                                                 @elseif ($admission->payment_status === 'paid' && $admission->status === 'accepted')

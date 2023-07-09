@@ -19,7 +19,7 @@ class Controller extends BaseController
     
     public function view_admission()
     {
-        $user = DB::table('users')->where('id', 1)->first();
+        $user = DB::table('users')->where('id', 32)->first();
         $admissions = Admission::where('user_id', $user->id)->get();
 
         $admissions = $admissions->sortByDesc('tgl_pendaftaran');
@@ -124,5 +124,26 @@ class Controller extends BaseController
         } else {
             return redirect('/admission')->with('message', 'Bukti pembayaran gagal disimpan.');
         }
+    }
+
+    public function dashboard_admin()
+    {
+        $total_user = User::count();
+        return view('admin.dashboard', compact('total_user'));
+    }
+
+    public function view_user(Request $request)
+    {
+        $keyword = $request->keyword;
+        $user = User::where(function ($query) use ($keyword) {
+            $query->where('name', 'LIKE', '%' . $keyword . '%')
+                ->orWhere('email', 'LIKE', '%' . $keyword . '%');
+        })
+        ->paginate(10);
+        
+        $user->withPath('data-user');
+        $user->appends($request->all());
+
+        return view('admin.view-user',compact('user','keyword'));
     }
 }
