@@ -17,6 +17,20 @@ class Controller extends BaseController
 {
     use AuthorizesRequests, ValidatesRequests;
     
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+    public function home_user()
+    {
+        return view('home');
+    }
+
+    public function home_admin()
+    {
+        return view('admin.dashboard');
+    }
+    
     public function view_admission()
     {
         $user = DB::table('users')->where('id', 32)->first();

@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 
 /**
@@ -21,10 +22,10 @@ class UserFactory extends Factory
             'name' => trim(preg_replace('/\s*(Dr|Dra|Ir|Prof)\.?/i', '', fake()->name())),
             'email' => fake()->unique()->safeEmail(),
             'email_verified_at' => now(),
-            'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
+            'password' => Hash::make('12345678'), // password
             'remember_token' => Str::random(10),
             'tempat_lahir' => fake()->city(),
-            'tgl_lahir' => fake()->date('Y-m-d', '2004-01-01'),
+            'tgl_lahir' => fake()->dateTimeBetween('2003-01-01', '2006-12-31')->format('Y-m-d'),
             'gender' => fake()->randomElement(['Male', 'Female']),
             'alamat' => fake()->address(),
             'telepon' => fake()->phoneNumber(),
@@ -32,10 +33,11 @@ class UserFactory extends Factory
             'riwayat_sekolah' => fake()->randomElement(['SMA', 'SMK', 'SMAIT', 'MA']),
             'nama_sekolah' => fake()->company(),
             'jurusan' => fake()->randomElement(['MIPA', 'IPS']),
-            'tahun_lulus' => fake()->numberBetween(2023, date('Y')),
+            'tahun_lulus' => fake()->numberBetween(2021, date('Y')),
             'pasfoto' => 'path/to/pasfoto.jpg',
             'ijazah' => 'path/to/ijazah.pdf',
             'transkrip_nilai' => 'path/to/transkrip.pdf',
+            'isAdmin' => fake()->boolean(false),
         ];
     }
 

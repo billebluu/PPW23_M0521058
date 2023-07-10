@@ -25,13 +25,13 @@
             </form>
           </li> -->
           <li><a class="nav-link scrollto" href="{{url('dashboard')}}">Dashboard</a></li>
-          <li><a class="nav-link scrollto" href="{{url('pic-seminar')}}">Request Publish</a></li>
+          <li><a class="nav-link scrollto" href="{{url('admission')}}">Admission</a></li>
           <li class="dropdown" style="color:white;"><a href="#"><span>{{ auth()->user()->nama_user }}</span> <i class="bi bi-chevron-down"></a></i>
             <ul>
               <li><a href="{{url('profile')}}">Lihat Profil</a></li>
               <li><a href="{{url('event-request')}}">Event Request</a></li>
               <li>
-                  <a href="{{ route('logout') }}" onclick="event.preventDefault(); confirmLogout();">
+                  <a href="{{ route('logout') }}" class="text-light" onclick="event.preventDefault(); confirmLogout();">
                     {{ __('Logout') }}
                   </a>
                   <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">

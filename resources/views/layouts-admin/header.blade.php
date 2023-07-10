@@ -58,16 +58,23 @@
             </li>
 
 
-            <!-- Nav Item - Logout -->
             <li class="nav-item">
-                <a class="nav-link" href="" onclick="event.preventDefault(); confirmLogout();">
+                <a class="nav-link" href="{{ route('logout') }}" onclick="event.preventDefault(); confirmLogout();">
                   <i class="fas fa-fw fa-sign-out-alt"></i>
                   <span>Logout</span>
                 </a>
-                <form id="logout-form" action="" method="POST" class="d-none">
+                <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
                     @csrf
                   </form>
             </li>
+            
+                <script>
+                  function confirmLogout() {
+                    if (confirm('Apakah Anda yakin ingin logout?')) {
+                      document.getElementById('logout-form').submit();
+                    }
+                  }
+                </script>
             <br><br>
             <!-- Sidebar Toggler (Sidebar) -->
             <div class="text-center d-none d-md-inline">
