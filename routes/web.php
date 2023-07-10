@@ -30,3 +30,8 @@ Route::post('/admission/store-payment', [Controller::class, 'store_payment']);
 // ADMIN
 Route::get('/admin', [Controller::class, 'dashboard_admin']);
 Route::get('/admin/data-user', [Controller::class, 'view_user']);
+Route::delete('/admin/data-user/delete-user/{id}', [Controller::class, 'delete_user'])->name('user.delete');
+Route::get('/admin/data-user/edit-user/{id}', [Controller::class, 'edit_user'])->name('user.edit');
+Route::post('/admin/data-user/store-user-edited', [Controller::class, 'store_user_edited']);
+Route::get('/admin/data-user/create-user', [Controller::class, 'create_user'])->name('user.create');
+Route::post('/admin/data-user/store-user', [Controller::class, 'store_user'])->name('user.stores');

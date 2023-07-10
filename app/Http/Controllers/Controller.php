@@ -146,4 +146,158 @@ class Controller extends BaseController
 
         return view('admin.view-user',compact('user','keyword'));
     }
+
+    public function delete_user($id){
+        $user = User::findOrFail($id);
+
+        // Hapus data pembicara
+        $user->delete();
+
+        return redirect()->back()->with('message', 'Data user berhasil dihapus.');
+    }
+
+    public function edit_user($id){
+        $user = User::find($id);
+        return view('admin.edit-user', compact('user'));
+    }
+
+    public function store_user_edited(Request $request)
+    {
+
+        $this->validate($request, [
+            'id' => 'required',
+            'name' => 'required',
+            'email' => 'required',
+            'tempat_lahir' => 'required',
+            'tgl_lahir' => 'required',
+            'gender' => 'required',
+            'alamat' => 'required',
+            'telepon' => 'required',
+            'kewarganegaraan' => 'required',
+            'riwayat_sekolah' => 'required',
+            'nama_sekolah' => 'required',
+            'jurusan' => 'required',
+            'tahun_lulus' => 'required',
+            'pasfoto' => 'nullable|image|mimes:png,jpg,jpeg',
+            'ijazah' => 'nullable|file|mimes:pdf',
+            'transkrip_nilai' => 'nullable|file|mimes:pdf',
+        ]);
+
+        $id = $request->input('id');
+        $user = User::find($id);
+
+        $pasfoto_path = null;
+        $ijazah_path = null;
+        $transkrip_nilai_path = null;
+
+        if ($request->hasFile('pasfoto')) {
+            $pasfoto = $request->file('pasfoto');
+            $pasfoto_path = $pasfoto->store('public/pasfoto');
+        }
+
+        if ($request->hasFile('ijazah')) {
+            $ijazah = $request->file('ijazah');
+            $ijazah_path = $ijazah->store('public/ijazah');
+        }
+        
+        if ($request->hasFile('transkrip_nilai')) {
+            $transkrip_nilai = $request->file('transkrip_nilai');
+            $transkrip_nilai_path = $transkrip_nilai->store('public/transkrip_nilai');
+        }
+
+        if ($user) {
+            $user->name = $request->input('name');
+            $user->email = $request->input('email');
+            $user->tempat_lahir = $request->input('tempat_lahir');
+            $user->tgl_lahir = $request->input('tgl_lahir');
+            $user->gender = $request->input('gender');
+            $user->alamat = $request->input('alamat');
+            $user->telepon = $request->input('telepon');
+            $user->kewarganegaraan = $request->input('kewarganegaraan');
+            $user->riwayat_sekolah = $request->input('riwayat_sekolah');
+            $user->nama_sekolah = $request->input('nama_sekolah');
+            $user->jurusan = $request->input('jurusan');
+            $user->tahun_lulus = $request->input('tahun_lulus');
+            $user->pasfoto = $pasfoto_path;
+            $user->ijazah = $ijazah_path;
+            $user->transkrip_nilai = $transkrip_nilai_path;
+            $user->save();
+
+            // Tampilkan pesan sukses atau alihkan pengguna ke halaman lain
+            return redirect('/admin/data-user')->with('success', 'Status peserta berhasil diperbarui.');
+        } else {
+            // Tampilkan pesan error jika id seminar tidak ditemukan
+            return redirect('/admin/data-user')->with('error', 'Gagal memperbarui status peserta.');
+        }
+    }
+
+    public function create_user(){
+        return view('admin.create-user');
+    }
+
+    public function store_user(Request $request)
+    {
+
+        $this->validate($request, [
+            'name' => 'required',
+            'email' => 'required',
+            'password' => 'required',
+            'tempat_lahir' => 'required',
+            'tgl_lahir' => 'required',
+            'gender' => 'required',
+            'alamat' => 'required',
+            'telepon' => 'required',
+            'kewarganegaraan' => 'required',
+            'riwayat_sekolah' => 'required',
+            'nama_sekolah' => 'required',
+            'jurusan' => 'required',
+            'tahun_lulus' => 'required',
+            'pasfoto' => 'nullable|image|mimes:png,jpg,jpeg',
+            'ijazah' => 'nullable|file|mimes:pdf',
+            'transkrip_nilai' => 'nullable|file|mimes:pdf',
+        ]);
+
+        $pasfoto_path = null;
+        $ijazah_path = null;
+        $transkrip_nilai_path = null;
+
+        if ($request->hasFile('pasfoto')) {
+            $pasfoto = $request->file('pasfoto');
+            $pasfoto_path = $pasfoto->store('public/pasfoto');
+        }
+
+        if ($request->hasFile('ijazah')) {
+            $ijazah = $request->file('ijazah');
+            $ijazah_path = $ijazah->store('public/ijazah');
+        }
+        
+        if ($request->hasFile('transkrip_nilai')) {
+            $transkrip_nilai = $request->file('transkrip_nilai');
+            $transkrip_nilai_path = $transkrip_nilai->store('public/transkrip_nilai');
+        }
+
+        $password = bcrypt($request->input('password'));
+
+            $user = new User();
+            $user->name = $request->input('name');
+            $user->email = $request->input('email');
+            $user->password = $password;
+            $user->tempat_lahir = $request->input('tempat_lahir');
+            $user->tgl_lahir = $request->input('tgl_lahir');
+            $user->gender = $request->input('gender');
+            $user->alamat = $request->input('alamat');
+            $user->telepon = $request->input('telepon');
+            $user->kewarganegaraan = $request->input('kewarganegaraan');
+            $user->riwayat_sekolah = $request->input('riwayat_sekolah');
+            $user->nama_sekolah = $request->input('nama_sekolah');
+            $user->jurusan = $request->input('jurusan');
+            $user->tahun_lulus = $request->input('tahun_lulus');
+            $user->pasfoto = $pasfoto_path;
+            $user->ijazah = $ijazah_path;
+            $user->transkrip_nilai = $transkrip_nilai_path;
+            $user->save();
+
+            // Tampilkan pesan sukses atau alihkan pengguna ke halaman lain
+            return redirect('/admin/data-user')->with('success', 'Data peserta berhasil ditambahkan.');
+    }
 }

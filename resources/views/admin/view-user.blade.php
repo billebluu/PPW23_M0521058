@@ -105,12 +105,16 @@
     </div>
     <div class="card-body">
         <div class="table-responsive">
+        <a href="{{ url('/admin/data-user/create-user') }}" style="color:black; text-decoration:underline;"><button class="btn btn-primary my-3 mx-1" style="border-radius: 5px;">+ Tambah User</button></a>
             <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0" align="center">
             <thead align="center">
                     <tr align="center">
                         <th>No</th>
                         <th>User</th>
                         <th>Email</th>
+                        <th>Nomor Telepon</th>
+                        <th>Alamat</th>
+                        <th>Dokumen</th>
                         <th>Manajemen</th>
                     </tr>
                 </thead>
@@ -121,37 +125,27 @@
                         <td>{{ $user->firstItem() + $i }}</td>
                         <td>{{ $value->name }}</td>
                         <td>{{ $value->email }}</td>
-                        <td>
-                            <a class="btn btn-danger" data-toggle="modal"  href="#"  data-target="#deleteModal<?= $value["id"]; ?>">DELETE</a>                                        
+                        <td>{{ $value->telepon }}</td>
+                        <td>{{ $value->alamat }}</td>
+                        <td class="text-center">
+                        @php
+                            $pasfotoFileName = basename($value->pasfoto);
+                            $ijazahFileName = basename($value->ijazah);
+                            $transkripNilaiFileName = basename($value->transkrip_nilai);
+                        @endphp
+                        <!-- Perlu menjalankan php artisan storage:link -->
+                            <a href="{{ Storage::url('pasfoto/'.$pasfotoFileName) }}" target="_blank" style="color:black; text-decoration:underline;"><button class="btn btn-outline-dark my-1 mx-1" style="border-radius: 20px;">Pasfoto</button></a>
+                            <a href="{{ Storage::url('ijazah/'.$ijazahFileName) }}" target="_blank" style="color:black; text-decoration:underline;"><button class="btn btn-outline-dark my-1 mx-1" style="border-radius: 20px;">Ijazah</button></a>
+                            <a href="{{ Storage::url('transkrip_nilai/'.$transkripNilaiFileName) }}" target="_blank" style="color:black; text-decoration:underline;"><button class="btn btn-outline-dark my-1 mx-1" style="border-radius: 20px;">Transkrip Nilai</button></a>
                         </td>
-
-                        <!-- Delete Modal-->
-                        <div class="modal fade" id="deleteModal<?= $value["id"]; ?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-                                aria-hidden="true">
-                                <div class="modal-dialog" role="document">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h5 class="modal-title" id="exampleModalLabel">Yakin untuk hapus data?</h5>
-                                            <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-                                                <span aria-hidden="true">×</span>
-                                            </button>
-                                        </div>
-                                        <div class="modal-body">Tekan tombol di bawah ini untuk menghapus data.</div>
-                                        <div class="modal-footer">
-                                            <form action="" method="POST">
-                                                    @csrf
-                                                    @method('DELETE')
-                                                    <button type="submit" class="btn btn-danger">
-                                                        DELETE
-                                                    </button>
-                                            </form>
-                                            <!-- <button class="btn btn-primary" type="button" data-dismiss="modal">DELETE</button> -->
-                                            <a class="btn btn-secondary" type="button" data-dismiss="modal">CANCEL</a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
+                        <td>
+                        <a href="{{ url('/admin/data-user/edit-user/'.$value->id) }}" style="color:black; text-decoration:underline;"><button class="btn btn-primary my-1 mx-1" style="border-radius: 5px;">Edit</button></a>
+                            <form action="{{ route('user.delete', $value->id) }}" method="POST" style="display: inline;">
+                            @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn btn-danger mx-1 my-1" style="border-radius:5px;" onclick="return confirm('Apakah Anda yakin ingin menghapus data user ini?')">Hapus</button>
+                            </form>
+                        </td>
                         </tr>
                         <?php $i++; ?>
                         @endforeach
