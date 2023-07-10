@@ -36,7 +36,7 @@
 
             <!-- Nav Item - Event Details -->
             <li class="nav-item">
-                <a class="nav-link" href="">
+                <a class="nav-link" href="{{ url('/admin/data-pembayaran') }}">
                     <i class="fas fa-fw fa-coins"></i>
                     <span>Data Pembayaran</span></a>
             </li>
@@ -44,7 +44,7 @@
 
             <!-- Nav Item - Event Approval Request -->
             <li class="nav-item">
-                <a class="nav-link" href="">
+                <a class="nav-link" href="{{ url('/admin/data-pendaftaran') }}">
                     <i class="fas fa-fw fa-check-circle"></i>
                     <span>Data Pendaftaran</span></a>
             </li>

@@ -41,3 +41,7 @@ Route::get('/admin/data-user/edit-user/{id}', [Controller::class, 'edit_user'])-
 Route::post('/admin/data-user/store-user-edited', [Controller::class, 'store_user_edited']);
 Route::get('/admin/data-user/create-user', [Controller::class, 'create_user'])->name('user.create');
 Route::post('/admin/data-user/store-user', [Controller::class, 'store_user'])->name('user.stores');
+Route::get('/admin/data-pendaftaran', [Controller::class, 'view_pendaftaran']);
+Route::get('/admin/data-pembayaran', [Controller::class, 'view_pembayaran']);
+Route::get('/admin/data-user/edit-admission-status', [Controller::class, 'edit_admission_status']);
+Route::post('/admin/data-user/store-admission-status', [Controller::class, 'store_admission_status']);

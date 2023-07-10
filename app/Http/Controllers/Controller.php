@@ -314,4 +314,51 @@ class Controller extends BaseController
             // Tampilkan pesan sukses atau alihkan pengguna ke halaman lain
             return redirect('/admin/data-user')->with('success', 'Data peserta berhasil ditambahkan.');
     }
+
+    public function view_pendaftaran(Request $request)
+    {
+        $keyword = $request->keyword;
+        
+        $pendaftaran = DB::table('admission')
+            ->join('users', 'admission.user_id', '=', 'users.id')
+            ->select('admission.*', 'users.name', 'users.email')
+            ->where(function ($query) use ($keyword) {
+                $query->where('users.name', 'LIKE', '%' . $keyword . '%')
+                    ->orWhere('users.email', 'LIKE', '%' . $keyword . '%');
+            })
+            ->paginate(10);
+            
+        $pendaftaran->withPath('data-pendaftaran');
+        $pendaftaran->appends($request->all());
+
+        return view('admin.view-pendaftaran', compact('pendaftaran', 'keyword'));
+    }
+
+    public function view_pembayaran(Request $request)
+    {
+        $keyword = $request->keyword;
+        
+        $pembayaran = DB::table('payments')
+        ->join('admission', 'payments.admission_id', '=', 'admission.id')
+        ->join('users', 'admission.user_id', '=', 'users.id')
+        ->select('payments.*', 'admission.*', 'users.name', 'users.email')
+        ->where(function ($query) use ($keyword) {
+            $query->where('users.name', 'LIKE', '%' . $keyword . '%')
+                ->orWhere('users.email', 'LIKE', '%' . $keyword . '%');
+        })
+        ->paginate(10);
+        
+    $pembayaran->withPath('data-pembayaran');
+
+    return view('admin.view-pembayaran', compact('pembayaran'));
+    }
+
+    public function edit_admission_status()
+    {
+        $admissions = Admission::with('user')->get();
+
+        // Lakukan apa pun dengan data gabungan yang diterima
+
+        return view('admin.edit-admission-status', compact('admissions'));
+    }
 }

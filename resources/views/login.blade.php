@@ -5,6 +5,17 @@
 @section('container')
 <section class="vh-100">
         <div class="container py-5 h-100">
+        <div class="d-flex align-items-center">
+          <tr> 
+              <td rowspan="2" width="12%">
+                <img width="70px" src="{{asset('/img/logo-hogwart.png')}}">
+              </td>
+              <td rowspan="2">
+                  <h2 class="logo me-auto text-dark" ><b>Hogwarts <br> University</b></h2>
+              </td>
+          </tr>
+        </div>
+        </tr>
           <div class="row d-flex align-items-center justify-content-center h-100">
             <div class="col-md-8 col-lg-7 col-xl-6">
               <img src="{{ asset('/img/magic_wind.png') }}" width="60%" class="ms-5">

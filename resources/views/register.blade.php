@@ -65,7 +65,7 @@
 
                 <!-- Register buttons -->
                 <div class="text-center">
-                  <p>If you Have Account <a href="{{ route('login') }}">Sign In</a> Here</p>
+                  <p>Sudah punya akun? <a href="{{ route('login') }}">Sign In!</a></p>
                   
                 </div>
               </form>

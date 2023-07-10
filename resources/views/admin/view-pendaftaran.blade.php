@@ -1,5 +1,5 @@
 @extends('layouts-admin.main')
-@section('title','Data User - Hogwarts University')
+@section('title','Data Pendaftaran - Hogwarts University')
 
     
     @section('container')
@@ -93,7 +93,7 @@
 <div class="container-fluid">
 
 <!-- Page Heading -->
-<h1 class="h3 mb-2 text-gray-800">Data User</h1>
+<h1 class="h3 mb-2 text-gray-800">Data Pendaftaran</h1>
 <!-- <p class="mb-4">DataTables is a third party plugin that is used to generate the demo table below.
     For more information about DataTables, please visit the <a target="_blank"
         href="https://datatables.net">official DataTables documentation</a>.</p> -->
@@ -105,46 +105,35 @@
     </div>
     <div class="card-body">
         <div class="table-responsive">
-        <a href="{{ url('/admin/data-user/create-user') }}" style="color:black; text-decoration:underline;"><button class="btn btn-primary my-3 mx-1" style="border-radius: 5px;">+ Tambah User</button></a>
             <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0" align="center">
             <thead align="center">
                     <tr align="center">
                         <th>No</th>
-                        <th>User</th>
-                        <th>Email</th>
-                        <th>Nomor Telepon</th>
-                        <th>Alamat</th>
+                        <th>Nama Peserta</th>
+                        <th>Program Studi</th>
+                        <th>Status Penerimaan</th>
+                        <th>Status Pembayaran</th>
+                        <th>Jalur Ujian</th>
+                        <th>Tanggal Pendaftaran</th>
                         <th>Dokumen</th>
-                        <th>Manajemen</th>
                     </tr>
                 </thead>
                 <tbody align="center">
                     <tr align="center">
                     <?php $i = 0;?>
-                    @foreach($user as $key=>$value)
-                        <td>{{ $user->firstItem() + $i }}</td>
+                    @foreach($pendaftaran as $key=>$value)
+                        <td>{{ $pendaftaran->firstItem() + $i }}</td>
                         <td>{{ $value->name }}</td>
-                        <td>{{ $value->email }}</td>
-                        <td>{{ $value->telepon }}</td>
-                        <td>{{ $value->alamat }}</td>
-                        <td class="text-center">
+                        <td>{{ $value->program_studi }}</td>
+                        <td>{{ $value->status }}<a href="{{ url('/admin/data-user/edit-admission-status/'.$value->id) }}"><i class="ps-2 bi bi-pencil"></i></a></td>
+                        <td>{{ $value->payment_status }}</td>
+                        <td>{{ $value->jalur_ujian }}</td>
+                        <td>{{ $value->tgl_pendaftaran }}</td>
                         @php
-                            $pasfotoFileName = basename($value->pasfoto);
-                            $ijazahFileName = basename($value->ijazah);
-                            $transkripNilaiFileName = basename($value->transkrip_nilai);
+                            $fileName = basename($value->sertif_utbk);
                         @endphp
                         <!-- Perlu menjalankan php artisan storage:link -->
-                            <a href="{{ Storage::url('pasfoto/'.$pasfotoFileName) }}" target="_blank" style="color:black; text-decoration:underline;"><button class="btn btn-outline-dark my-1 mx-1" style="border-radius: 20px;">Pasfoto</button></a>
-                            <a href="{{ Storage::url('ijazah/'.$ijazahFileName) }}" target="_blank" style="color:black; text-decoration:underline;"><button class="btn btn-outline-dark my-1 mx-1" style="border-radius: 20px;">Ijazah</button></a>
-                            <a href="{{ Storage::url('transkrip_nilai/'.$transkripNilaiFileName) }}" target="_blank" style="color:black; text-decoration:underline;"><button class="btn btn-outline-dark my-1 mx-1" style="border-radius: 20px;">Transkrip Nilai</button></a>
-                        </td>
-                        <td>
-                        <a href="{{ url('/admin/data-user/edit-user/'.$value->id) }}" style="color:black; text-decoration:underline;"><button class="btn btn-primary my-1 mx-1" style="border-radius: 5px;">Edit</button></a>
-                            <form action="{{ route('user.delete', $value->id) }}" method="POST" style="display: inline;">
-                            @csrf
-                                @method('DELETE')
-                                <button type="submit" class="btn btn-danger mx-1 my-1" style="border-radius:5px;" onclick="return confirm('Apakah Anda yakin ingin menghapus data user ini?')">Hapus</button>
-                            </form>
+                            <a href="{{ Storage::url('sertif_utbk/'.$fileName) }}" target="_blank" style="color:black; text-decoration:underline;"><button class="btn btn-outline-dark my-1 mx-1" style="border-radius: 20px;">Sertifikat UTBK</button></a>
                         </td>
                         </tr>
                         <?php $i++; ?>
@@ -153,14 +142,14 @@
             </table>
             <!-- Pagination -->
             <div class="entry-info">
-                Showing {{ $user->firstItem() }} to {{ $user->lastItem() }} of {{ $user->total() }} entries
+                Showing {{ $pendaftaran->firstItem() }} to {{ $pendaftaran->lastItem() }} of {{ $pendaftaran->total() }} entries
             </div>
             <div class="float-right">
-            @if ($user->previousPageUrl())
+            @if ($pendaftaran->previousPageUrl())
                 <a href="{{ $user->previousPageUrl() }}" class="btn btn-primary">Previous</a>
             @endif
 
-            @if ($user->nextPageUrl())
+            @if ($pendaftaran->nextPageUrl())
                 <a href="{{ $user->nextPageUrl() }}" class="btn btn-primary">Next</a>
             @endif
         </div>
