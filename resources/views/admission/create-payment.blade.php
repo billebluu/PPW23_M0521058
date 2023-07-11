@@ -1,5 +1,5 @@
 @extends('layouts.main-ip')
-@section('title','Hogwart University')
+@section('title','Hogwarts University')
     
     @section('container')
 

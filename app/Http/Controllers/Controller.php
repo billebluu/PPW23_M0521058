@@ -8,7 +8,9 @@ use Illuminate\Routing\Controller as BaseController;
 use App\Models\Admission;
 use App\Models\Payment;
 use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
 
@@ -21,20 +23,16 @@ class Controller extends BaseController
     {
         $this->middleware('auth');
     }
-    public function home_user()
+
+    public function home()
     {
         return view('home');
-    }
-
-    public function home_admin()
-    {
-        return view('admin.dashboard');
     }
     
     public function view_admission()
     {
-        $user = DB::table('users')->where('id', 32)->first();
-        $admissions = Admission::where('user_id', $user->id)->get();
+        $userId = Auth::id();
+        $admissions = Admission::where('user_id', $userId)->get();
 
         $admissions = $admissions->sortByDesc('tgl_pendaftaran');
 
@@ -51,6 +49,8 @@ class Controller extends BaseController
 
     public function store_admission_utbk(Request $request)
     {
+
+        $userId = Auth::id();
 
         $this->validate($request, [
             'program_studi' => 'required',
@@ -70,7 +70,7 @@ class Controller extends BaseController
         }
 
         Admission::create([
-            'user_id' => 1,
+            'user_id' => $userId,
             'program_studi' => $request->program_studi,
             'tgl_pendaftaran' => $request->tgl_pendaftaran,
             'poster' => $sertif_utbk_path,
@@ -82,6 +82,7 @@ class Controller extends BaseController
 
     public function store_admission_utul(Request $request)
     {
+        $userId = Auth::id();
 
         $this->validate($request, [
             'program_studi' => 'required',
@@ -89,7 +90,7 @@ class Controller extends BaseController
         ]);
 
         Admission::create([
-            'user_id' => 1,
+            'user_id' => $userId,
             'program_studi' => $request->program_studi,
             'tgl_pendaftaran' => $request->tgl_pendaftaran,
             'jalur_ujian' => 'Ujian Tulis',
@@ -131,7 +132,7 @@ class Controller extends BaseController
 
         $admission = Admission::find($id);
         if ($admission) {
-            $admission->payment_status = 'paid';
+            $admission->payment_status = 'pending';
             $admission->save();
     
             return redirect('/admission')->with('message', 'Bukti pembayaran berhasil disimpan.');
@@ -143,7 +144,10 @@ class Controller extends BaseController
     public function dashboard_admin()
     {
         $total_user = User::count();
-        return view('admin.dashboard', compact('total_user'));
+        $total_peserta_utbk = Admission::where('jalur_ujian', 'UTBK')->count();
+        $total_peserta_utul = Admission::where('jalur_ujian', 'Ujian Tulis')->count();
+        $total_unverified_payment = Admission::where('payment_status', 'pending')->count();
+        return view('admin.dashboard', compact('total_user', 'total_peserta_utbk', 'total_peserta_utul', 'total_unverified_payment'));
     }
 
     public function view_user(Request $request)
@@ -168,6 +172,11 @@ class Controller extends BaseController
         $user->delete();
 
         return redirect()->back()->with('message', 'Data user berhasil dihapus.');
+    }
+
+    public function more_user($id){
+        $user = User::find($id);
+        return view('admin.more-user', compact('user'));
     }
 
     public function edit_user($id){
@@ -350,15 +359,51 @@ class Controller extends BaseController
         
     $pembayaran->withPath('data-pembayaran');
 
-    return view('admin.view-pembayaran', compact('pembayaran'));
+    return view('admin.view-pembayaran', compact('pembayaran', 'keyword'));
     }
 
-    public function edit_admission_status()
+    public function edit_admission_status($id)
     {
-        $admissions = Admission::with('user')->get();
+        $admission = Admission::join('users', 'admission.user_id', '=', 'users.id')
+        ->where('admission.id', $id)
+        ->select('admission.*', 'users.name', 'users.email')
+        ->first();
 
-        // Lakukan apa pun dengan data gabungan yang diterima
-
-        return view('admin.edit-admission-status', compact('admissions'));
+        return view('admin.edit-admission-status', compact('admission'));
     }
+
+    public function store_admission_status(Request $request)
+    {
+        $this->validate($request, [
+            'id' => 'required',
+            'status' => 'required',
+        ]);
+
+        $id = $request->input('id');
+        $admission = Admission::find($id);
+
+        if($admission){
+            $admission->status = $request->input('status');
+            $admission->save();
+
+            return redirect('/admin/data-user')->with('success', 'Status penerimaan berhasil diperbarui.');
+        }
+
+    }
+
+    public function verif_pembayaran(Request $request)
+    {
+        $admission_id = $request->input('admission_id');
+
+        $admission = Admission::find($admission_id);
+        if ($admission) {
+            $admission->payment_status = 'paid';
+            $admission->save();
+    
+            return redirect('/admin/data-pembayaran')->with('message', 'Pembayaran berhasil diverifikasi.');
+        } else {
+            return redirect('/admin/data-pembayaran')->with('message', 'Pembayaran gagal diverifikasi.');
+        }
+    }
+
 }

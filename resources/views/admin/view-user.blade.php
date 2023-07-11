@@ -139,6 +139,7 @@
                             <a href="{{ Storage::url('transkrip_nilai/'.$transkripNilaiFileName) }}" target="_blank" style="color:black; text-decoration:underline;"><button class="btn btn-outline-dark my-1 mx-1" style="border-radius: 20px;">Transkrip Nilai</button></a>
                         </td>
                         <td>
+                        <a href="{{ url('/admin/data-user/more-user/'.$value->id) }}" style="color:black; text-decoration:underline;"><button class="btn btn-secondary my-1 mx-1" style="border-radius: 5px;">More</button></a>
                         <a href="{{ url('/admin/data-user/edit-user/'.$value->id) }}" style="color:black; text-decoration:underline;"><button class="btn btn-primary my-1 mx-1" style="border-radius: 5px;">Edit</button></a>
                             <form action="{{ route('user.delete', $value->id) }}" method="POST" style="display: inline;">
                             @csrf

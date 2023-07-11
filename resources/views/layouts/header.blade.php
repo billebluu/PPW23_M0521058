@@ -1,11 +1,18 @@
 <header id="header" class="fixed-top ">
-    <div class="container d-flex align-items-center">
+    <div class="container d-flex align-items-center justify-content-between">
 
-      <h1 class="logo me-auto"><a href="index.html">SeminarKu</a></h1>
-      <!-- Uncomment below if you prefer to use an image logo -->
-      <!-- <a href="index.html" class="logo me-auto"><img src="assets/img/logo.png" alt="" class="img-fluid"></a>-->
+    <table>
+                    <tr> 
+                        <td rowspan="2" width="12%">
+                            <img width="70px" src="{{asset('/img/logo-hogwart.png')}}">
+                        </td>
+                        <td rowspan="2">
+                            <h2 class="logo text-light" ><a href="{{url('/')}}"><b>Hogwarts <br> University</b></a></h2>
+                        </td>
+                    </tr>
+                </table>
 
-      <nav id="navbar" class="navbar">
+                <nav id="navbar" class="navbar">
         <ul>
           @auth
           <!-- <li><a class="nav-link scrollto active" href="#hero">Home</a></li>
@@ -19,8 +26,9 @@
                 <button class="search" type="submit" name="search">Search</button>
             </form>
           </li> -->
-          <li><a class="nav-link scrollto" href="{{url('/home')}}">Dashboard</a></li>
-          <li><a class="nav-link scrollto" href="{{url('admission')}}">Admission</a></li>
+          <li><a class="nav-link scrollto" href="{{url('/home')}}">Home</a></li>
+          <li><a class="nav-link scrollto" href="{{url('/admission')}}">Admission</a></li>
+          <li><a class="nav-link scrollto" href="{{url('/admin')}}">Admin Dashboard</a></li>
           <li class="dropdown" style="color:white"><a><span>{{ auth()->user()->name }}</span> <i class="bi bi-chevron-down"></i></a>
             <ul>
               <li><a href="{{url('profile')}}">Lihat Profil</a></li>

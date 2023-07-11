@@ -22,8 +22,11 @@ Route::get('/', function () {
 
 // LOGIN & REGISTER
 Auth::routes();
-Route::get('/home', [Controller::class, 'home_user'])->name('user.home');
-Route::get('/admin', [Controller::class, 'dashboard_admin'])->name('admin.home')->middleware('role');
+Route::get('/home', [Controller::class, 'home'])->name('home');
+
+Route::get('/admin', [Controller::class, 'dashboard_admin'])
+       ->middleware('can:isAdmin')
+       ->name('ADMIN');
 
 // USER
 Route::get('/admission', [Controller::class, 'view_admission']);
@@ -37,11 +40,13 @@ Route::post('/admission/store-payment', [Controller::class, 'store_payment']);
 // ADMIN
 Route::get('/admin/data-user', [Controller::class, 'view_user']);
 Route::delete('/admin/data-user/delete-user/{id}', [Controller::class, 'delete_user'])->name('user.delete');
+Route::get('/admin/data-user/more-user/{id}', [Controller::class, 'more_user'])->name('user.more');
 Route::get('/admin/data-user/edit-user/{id}', [Controller::class, 'edit_user'])->name('user.edit');
 Route::post('/admin/data-user/store-user-edited', [Controller::class, 'store_user_edited']);
 Route::get('/admin/data-user/create-user', [Controller::class, 'create_user'])->name('user.create');
 Route::post('/admin/data-user/store-user', [Controller::class, 'store_user'])->name('user.stores');
 Route::get('/admin/data-pendaftaran', [Controller::class, 'view_pendaftaran']);
 Route::get('/admin/data-pembayaran', [Controller::class, 'view_pembayaran']);
-Route::get('/admin/data-user/edit-admission-status', [Controller::class, 'edit_admission_status']);
+Route::get('/admin/data-user/edit-admission-status/{id}', [Controller::class, 'edit_admission_status']);
 Route::post('/admin/data-user/store-admission-status', [Controller::class, 'store_admission_status']);
+Route::post('/admin/data-pembayaran/verifikasi-pembayaran', [Controller::class, 'verif_pembayaran'])->name('verifikasi.pembayaran');

@@ -110,10 +110,11 @@
                     <tr align="center">
                         <th>No</th>
                         <th>Nama Peserta</th>
+                        <th>Email</th>
+                        <th>Jalur Ujian</th>
                         <th>Program Studi</th>
                         <th>Status Penerimaan</th>
                         <th>Status Pembayaran</th>
-                        <th>Jalur Ujian</th>
                         <th>Tanggal Pendaftaran</th>
                         <th>Dokumen</th>
                     </tr>
@@ -124,17 +125,35 @@
                     @foreach($pendaftaran as $key=>$value)
                         <td>{{ $pendaftaran->firstItem() + $i }}</td>
                         <td>{{ $value->name }}</td>
-                        <td>{{ $value->program_studi }}</td>
-                        <td>{{ $value->status }}<a href="{{ url('/admin/data-user/edit-admission-status/'.$value->id) }}"><i class="ps-2 bi bi-pencil"></i></a></td>
-                        <td>{{ $value->payment_status }}</td>
+                        <td>{{ $value->email }}</td>
                         <td>{{ $value->jalur_ujian }}</td>
+                        <td>{{ $value->program_studi }}</td>
+                        @if($value->status === 'pending')
+                        <td class="font-weight-bold text-secondary">PENDING<a href="{{ url('/admin/data-user/edit-admission-status/'.$value->id) }}"><i class="px-1 fas fa-pencil-alt fa-sm text-dark"></i></a></td>
+                        @elseif($value->status === 'accepted')
+                        <td class="text-success">LOLOS</td>
+                        @else($value->status === 'rejected')
+                        <td class="text-success">TIDAK LOLOS</td>
+                        @endif
+                        @if($value->payment_status === 'pending')
+                        <td class="font-weight-bold text-secondary">SEGERA VERIFIKASI</td>
+                        @elseif($value->payment_status === 'unpaid')
+                        <td class="text-danger">BELUM TERBAYAR</td>
+                        @else($value->payment_status === 'paid')
+                        <td class="text-success">SUDAH TERBAYAR</td>
+                        @endif
                         <td>{{ $value->tgl_pendaftaran }}</td>
+                        @if($value->jalur_ujian === 'UTBK')
+                        <td class="text-center">
                         @php
-                            $fileName = basename($value->sertif_utbk);
+                            $sertifFileName = basename($value->sertif_utbk);
                         @endphp
                         <!-- Perlu menjalankan php artisan storage:link -->
-                            <a href="{{ Storage::url('sertif_utbk/'.$fileName) }}" target="_blank" style="color:black; text-decoration:underline;"><button class="btn btn-outline-dark my-1 mx-1" style="border-radius: 20px;">Sertifikat UTBK</button></a>
+                            <a href="{{ Storage::url('sertif_utbk/'.$sertifFileName) }}" target="_blank" style="color:black; text-decoration:underline;"><button class="btn btn-outline-dark my-1 mx-1" style="border-radius: 20px;">Sertifikat UTBK</button></a>
                         </td>
+                        @else($value->jalur_ujian === 'UTUL')
+                        <td>-</td>
+                        @endif
                         </tr>
                         <?php $i++; ?>
                         @endforeach

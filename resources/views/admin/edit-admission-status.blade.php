@@ -25,26 +25,42 @@
 
                     <form action="{{ url('/admin/data-user/store-admission-status') }}" method="POST" enctype="multipart/form-data">
                         @csrf
-                        <input type="hidden" name="id" value="{{ $admissions->users_id }}">
+                        <input type="hidden" name="id" value="{{ $admission->id }}">
                         <div class="card-text grid-item p-4">
                             <div class="mb-3 form-group">
                                 <label for="name" class="form-label">Nama Lengkap</label>
-                                <input type="text" name="name" value="{{ old('name', $admissions->name) }}" class="form-control" id="name" aria-describedby="name" disabled>
+                                <input type="text" name="name" value="{{ old('status', $admission->name) }}" class="form-control" id="name" aria-describedby="name" disabled>
                             </div>
                             <div class="mb-3 form-group">
                                 <label for="email" class="form-label">Email</label>
-                                <input type="email" name="email" value="{{ old('email', $admissions->email) }}" class="form-control" id="email" aria-describedby="email" disabled>
+                                <input type="email" name="email" value="{{ old('email', $admission->email) }}" class="form-control" id="email" aria-describedby="email" disabled>
                             </div>
                             <div class="mb-3 form-group">
-                                <label for="tempat_lahir" class="form-label">Status Penerimaan</label>
-                                <input type="text" name="status"value="{{ old('status', $admissions->status) }}" class="form-control @error('status') is-invalid @enderror" id="status" aria-describedby="status">
+                                <label for="riwayat_sekolah" class="form-label">Riwayat Sekolah</label>
+                                <input type="riwayat_sekolah" name="riwayat_sekolah" value="{{ old('riwayat_sekolah', $admission->riwayat_sekolah) }}" class="form-control" id="riwayat_sekolah" aria-describedby="riwayat_sekolah" disabled>
+                            </div>
+                            <div class="mb-3 form-group">
+                                <label for="jalur_ujian" class="form-label">Jalur Ujian</label>
+                                <input type="jalur_ujian" name="jalur_ujian" value="{{ old('jalur_ujian', $admission->jalur_ujian) }}" class="form-control" id="jalur_ujian" aria-describedby="jalur_ujian" disabled>
+                            </div>
+                            <div class="mb-3 form-group">
+                                <label for="email" class="form-label">Email</label>
+                                <input type="email" name="email" value="{{ old('email', $admission->email) }}" class="form-control" id="email" aria-describedby="email" disabled>
+                            </div>
+                            <div class="mb-3 form-group">
+                                <label for="status" class="form-label">Status Penerimaan</label>
+                                <select name="status" class="form-control @error('status') is-invalid @enderror" id="status">
+                                    <option value="pending" {{ old('status', $admission->status) === 'pending' ? 'selected' : '' }}>Pending</option>
+                                    <option class="font-weight-bold text-success" value="accepted" {{ old('status', $admission->status) === 'accepted' ? 'selected' : '' }}>Lolos</option>
+                                    <option class="font-weight-bold text-danger" value="rejected" {{ old('status', $admission->status) === 'rejected' ? 'selected' : '' }}>Tidak Lolos</option>
+                                </select>
                                 @error('status')
                                     <div class="alert alert-danger mt-2">
                                         {{ $message }}
                                     </div>
                                 @enderror
                             </div>
-                            
+
                             <button class="btn btn-primary mt-3" type="submit">Submit</button>
                         </div>
                     </form>
@@ -52,7 +68,5 @@
             </div>
 </div>
 <!-- End of Main Content -->
-
-    
 
 @endsection

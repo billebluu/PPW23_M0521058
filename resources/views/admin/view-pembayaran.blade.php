@@ -110,10 +110,13 @@
                     <tr align="center">
                         <th>No</th>
                         <th>Nama Peserta</th>
+                        <th>Email</th>
+                        <th>Jalur Ujian</th>
                         <th>Metode Pembayaran</th>
                         <th>Nominal Pembayaran</th>
                         <th>Tanggal Pembayaran</th>
                         <th>Bukti Pembayaran</th>
+                        <th>Action</th>
                     </tr>
                 </thead>
                 <tbody align="center">
@@ -121,16 +124,48 @@
                     <?php $i = 0;?>
                     @foreach($pembayaran as $key=>$value)
                         <td>{{ $pembayaran->firstItem() + $i }}</td>
+                        <td>{{ $value->name }}</td>
+                        <td>{{ $value->email }}</td>
+                        <td>{{ $value->jalur_ujian }}</td>
                         <td>{{ $value->payment_method }}</td>
                         <td>{{ $value->amount }}</td>
                         <td>{{ $value->payment_date }}</td>
                         <td class="text-center">
                         @php
-                            $$fileName = basename($value->bukti_payment);
+                            $fileName = basename($value->bukti_payment);
                         @endphp
                         <!-- Perlu menjalankan php artisan storage:link -->
                             <a href="{{ Storage::url('bukti_payment/'.$fileName) }}" target="_blank" style="color:black; text-decoration:underline;"><button class="btn btn-outline-dark my-1 mx-1" style="border-radius: 20px;">Bukti Pembayaran</button></a>
                         </td>
+                        @if($value->payment_status==='pending')
+                        <td>
+                        <button class="btn btn-danger my-1 mx-1" style="border-radius: 5px;" data-toggle="modal" data-target="#verifikasiModal">Verifikasi</button>
+                        </td>
+                                                <!-- Modal -->
+                                                <div class="modal fade" id="verifikasiModal" tabindex="-1" role="dialog" aria-labelledby="verifikasiModalLabel" aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="verifikasiModalLabel">Verifikasi Pembayaran</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <form action="{{ route('verifikasi.pembayaran') }}" method="POST">
+                                            @csrf
+                                            <input type="hidden" name="admission_id" value="{{ $value->admission_id }}">
+                                            
+                                            <button type="submit" class="btn btn-danger">Verifikasi</button>
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        @else($value->payment_status==='paid')
+                        <td>Pembayaran sudah diverifikasi</td>
+                        @endif
                         </tr>
                         <?php $i++; ?>
                         @endforeach

@@ -1,6 +1,6 @@
 <!-- ======= Header ======= -->
 <header id="header" class="fixed-top header-inner-pages">
-    <div class="container d-flex align-items-center">
+    <div class="container d-flex align-items-center justify-content-between">
 
     <table>
                     <tr> 
@@ -8,15 +8,15 @@
                             <img width="70px" src="{{asset('/img/logo-hogwart.png')}}">
                         </td>
                         <td rowspan="2">
-                            <h2 class="logo me-auto text-light" ><a href="index.html"><b>Hogwarts <br> University</b></a></h2>
+                            <h2 class="logo text-light" ><a href="{{url('/')}}"><b>Hogwarts <br> University</b></a></h2>
                         </td>
                     </tr>
                 </table>
                 <table border="0" cellpadding="0" width="100%"></table>
 
-      <nav id="navbar" class="navbar">
+                <nav id="navbar" class="navbar">
         <ul>
-       
+        @auth
          
           <!-- <li>
          
@@ -26,11 +26,12 @@
                 <button class="search2" type="submit" name="search2">Search</button>
             </form>
           </li> -->
-          <li><a class="nav-link scrollto text-light" href="">Dashboard</a></li>
-          <li><a class="nav-link scrollto" href="{{url('admission')}}">Admission</a></li>
-          <li class="dropdown" style="color:white;"><a href="#"><span>{{ auth()->user()->nama_user }}</span> <i class="bi bi-chevron-down"></i></a>
+          <li><a class="nav-link scrollto" href="{{url('/home')}}">Home</a></li>
+          <li><a class="nav-link scrollto" href="{{url('/admission')}}">Admission</a></li>
+          <li><a class="nav-link scrollto" href="{{url('/admin')}}">Admin Dashboard</a></li>
+          <li class="dropdown" style="color:white;"><a href="#"><span>{{ auth()->user()->name }}</span> <i class="bi bi-chevron-down"></i></a>
             <ul>
-              <li><a href="">Lihat Profil</a></li>
+              <li><a href="{{url('profile')}}">Lihat Profil</a></li>
               <!-- <li class="dropdown"><a href="#"><span>Deep Drop Down</span> <i class="bi bi-chevron-right"></i></a>
                 <ul>
                   <li><a href="#">Deep Drop Down 1</a></li>
@@ -41,10 +42,10 @@
                 </ul>
               </li> -->
               <li>
-                  <a href="" onclick="event.preventDefault(); confirmLogout();">
+                  <a href="{{ route('logout') }}" onclick="event.preventDefault(); confirmLogout();">
                     {{ __('Logout') }}
                   </a>
-                  <form id="logout-form" action="" method="" class="d-none">
+                  <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
                     @csrf
                   </form>
                 </li>
@@ -65,7 +66,7 @@
           
         </ul>
         <i class="bi bi-list mobile-nav-toggle"></i>
-        
+        @endauth
       </nav><!-- .navbar -->
 
     </div>
